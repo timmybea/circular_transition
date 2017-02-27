@@ -25,7 +25,7 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = ColorManager.customGold()
         
         view.addSubview(button)
         

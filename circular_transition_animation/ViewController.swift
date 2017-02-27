@@ -8,8 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UIViewControllerTransitioningDelegate {
+    
+    let transition = CircularTransition()
+    
     let imageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "pink_floyd")
@@ -42,21 +44,35 @@ class ViewController: UIViewController {
         
         button.center = CGPoint(x: (view.frame.width / 2), y: 90)
     }
-    
-    
-    lazy var secondViewController: SecondViewController = {
-        let vc = SecondViewController()
-        return vc
-    }()
+
     
     func pushToSecondVC() {
-        
+        let secondViewController = SecondViewController()
+        secondViewController.transitioningDelegate = self
+        secondViewController.modalPresentationStyle = .custom
         self.present(secondViewController, animated: true)
     }
 
+    //MARK: repositions the views in the event of a transition (change in orientation)
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         button.center = CGPoint(x: (size.width / 2), y: 90)
     }
-
+    
+    //MARK: delegate functions
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .present
+        transition.startingPoint = button.center
+        transition.circleColor = ColorManager.customGold()
+        
+        return transition
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .dismiss
+        transition.startingPoint = button.center
+        transition.circleColor = ColorManager.customGold()
+        
+        return transition
+    }
 }
 
